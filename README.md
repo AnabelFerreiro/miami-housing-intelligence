@@ -5,7 +5,7 @@ An end-to-end data pipeline that ingests, stores, and analyzes 14 years of Miami
 
 Built for: Business Analyst roles at Miami-based companies (Lennar, Royal Caribbean, Carnival, and similar) where pricing intelligence and AI-driven automation are becoming core to the analyst function.
 
-![Dashboard Screenshot](dashboard/dashboarddashboardscreenshot.png)
+![Dashboard Screenshot](dashboard/dashboard_screenshot.png)
 
 
 Why this project
