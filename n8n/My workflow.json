@@ -1,0 +1,116 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7b0b810f-5d00-40c6-bd98-e28b44a8d29f",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "command": "C:\\Users\\anabe\\Desktop\\USF\\proyectos-code\\miami-housing-intelligence\\venv\\Scripts\\python.exe C:\\Users\\anabe\\Desktop\\USF\\proyectos-code\\miami-housing-intelligence\\scripts\\fetch_data.py"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f71ef3c3-87be-43ba-a68d-724d6a8c62e8",
+      "name": "Execute Command"
+    },
+    {
+      "parameters": {
+        "command": "C:\\Users\\anabe\\Desktop\\USF\\proyectos-code\\miami-housing-intelligence\\venv\\Scripts\\python.exe C:\\Users\\anabe\\Desktop\\USF\\proyectos-code\\miami-housing-intelligence\\scripts\\load_db.py"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "1e17780a-9b16-4f3e-8c55-ed91ef5c8801",
+      "name": "Execute Command1"
+    },
+    {
+      "parameters": {
+        "command": "C:\\Users\\anabe\\Desktop\\USF\\proyectos-code\\miami-housing-intelligence\\venv\\Scripts\\python.exe C:\\Users\\anabe\\Desktop\\USF\\proyectos-code\\miami-housing-intelligence\\scripts\\generate_insights.py\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        528,
+        0
+      ],
+      "id": "dac16cad-0e98-4551-9e4b-043d5f211f93",
+      "name": "Execute Command2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Execute Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command": {
+      "main": [
+        [
+          {
+            "node": "Execute Command1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command1": {
+      "main": [
+        [
+          {
+            "node": "Execute Command2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "d1eaf197-97ff-41cf-b973-aead53d8c7f9",
+  "meta": {
+    "instanceId": "2d295d271b5d2d63e5e5c5b1f43c36d6d6f2855fc652c7b05689f15344b7b353"
+  },
+  "nodeGroups": [],
+  "id": "LsgApLwqr1uTbdnx",
+  "tags": []
+}

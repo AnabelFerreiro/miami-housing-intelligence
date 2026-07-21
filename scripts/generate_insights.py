@@ -1,17 +1,27 @@
 """Generate natural language insights on Miami zip-level housing trends using a local Ollama model."""
 
+import os
 import sqlite3
+import sys
 from datetime import datetime, timezone
+from pathlib import Path
 
+import httpx
 import ollama
 import pandas as pd
 
-DB_PATH = "db/housing.db"
+DB_PATH = Path(__file__).resolve().parent.parent / "db" / "housing.db"
 SOURCE_TABLE = "zip_market_data"
 LOG_TABLE = "insights_log"
 MODEL = "llama3.1:8b"
 MONTHS = 12
 PROPERTY_TYPE = "All Residential"
+
+# Explicit host so this doesn't depend on inherited shell env or PATH. Override
+# with the OLLAMA_HOST env var if the server isn't reachable at the default
+# (e.g. "http://host.docker.internal:11434" if this script runs inside a container).
+OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434")
+ollama_client = ollama.Client(host=OLLAMA_HOST)
 
 QUERY = f"""
 WITH ranked AS (
@@ -75,7 +85,17 @@ def build_prompt(summary: pd.DataFrame) -> str:
 
 
 def generate_insights(prompt: str) -> str:
-    response = ollama.chat(model=MODEL, messages=[{"role": "user", "content": prompt}])
+    try:
+        response = ollama_client.chat(model=MODEL, messages=[{"role": "user", "content": prompt}])
+    except httpx.ConnectError as e:
+        sys.exit(
+            f"Could not reach Ollama at {OLLAMA_HOST}: {e}\n"
+            "Make sure the Ollama app/service is running and, if this script runs "
+            "inside a container or under a different user context, set the OLLAMA_HOST "
+            "environment variable to a reachable address."
+        )
+    except ollama.ResponseError as e:
+        sys.exit(f"Ollama returned an error (model='{MODEL}'): {e}")
     return response["message"]["content"]
 
 
@@ -98,6 +118,9 @@ def save_insights(conn: sqlite3.Connection, insights: str) -> None:
 
 
 def main() -> None:
+    if not DB_PATH.exists():
+        sys.exit(f"Database not found at {DB_PATH}. Run scripts/load_db.py first.")
+
     with sqlite3.connect(DB_PATH) as conn:
         recent = fetch_recent_data(conn)
         summary = summarize_by_zip(recent)
