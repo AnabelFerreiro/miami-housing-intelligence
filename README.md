@@ -21,7 +21,7 @@ Generates natural-language market insights using a locally-run LLM — no extern
 Automates the entire fetch → load → insight pipeline on a weekly schedule using n8n
 Visualizes the results in an interactive Power BI dashboard: KPI summary, AI-generated insights, and ZIP-code-level pricing trends
 Architecture
-miami-housing-intelligence/
+```miami-housing-intelligence/
 ├── data/
 │   ├── raw/                    # Cached source file (gitignored)
 │   └── processed/              # Filtered Miami-metro dataset
@@ -37,7 +37,7 @@ miami-housing-intelligence/
 ├── dashboard/
 │   ├── miami_housing_summary.csv
 │   └── miami_housing_dashboard.pbix
-└── README.md
+└── README.md```
 
 Stack: Python (pandas) · SQLite · Ollama (Llama 3.1 8B, local) · n8n · Power BI
 
